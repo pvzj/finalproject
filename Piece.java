@@ -16,9 +16,12 @@ public abstract class Piece {
     
     public PieceOutcome coordinateOutcomes;
     
+    public boolean hasMoved;
+    
     public Piece(Color color, Square position) {
         this.color = color;
         this.position = position;
+        hasMoved = false;
     }
 
     public Color getColor() {
