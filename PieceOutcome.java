@@ -13,19 +13,17 @@ import java.util.Set;
  * @author jchen
  */
 public class PieceOutcome {
-    Set<List<Square>> outcomes;
+    Set<List<Outcome>> outcomes;
     
     PieceOutcome() {
         outcomes = new HashSet<>();
     }
 
-    public void addDirection(List<Square> direction) {
+    public void addDirection(List<Outcome> direction) {
         outcomes.add(direction);
     }
 
-    public Set<List<Square>> getOutcomes() {
+    public Set<List<Outcome>> getOutcomes() {
         return outcomes;
     }
-
-
 }

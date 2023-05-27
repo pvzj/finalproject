@@ -37,39 +37,47 @@ public class Pawn extends Piece {
         return (this.color == Color.WHITE ? whiteOutcomeArray : blackOutcomeArray);
     }
     
+//    @Override
+//    public List<Move> possibleMoves(Board b) {
+//        List<Move> possibleMoves = new ArrayList<>();
+//        
+//        for (List<Outcome> direction : coordinateOutcomes.outcomes) {
+//            for (Outcome o : direction) {
+//                int targetRow = this.position.row + o.rowDiff;
+//                int targetCol = this.position.col + o.colDiff;
+//
+//                
+//                
+//            }
+//        }
+//        
+//        return possibleMoves;
+//    }
+    
     @Override
-    public List<Move> possibleMoves(Board b) {
-        List<Move> possibleMoves = new ArrayList<>();
+    public boolean checkMove(Board b, List<Move> possibleMoves, int targetRow, int targetCol) {
+        int rowDiff = this.position.row-targetRow;
+        int colDiff = this.position.col-targetCol;
         
-        for (List<Square> direction : coordinateOutcomes.outcomes) {
-            for (Square s : direction) {
-                int targetRow = this.position.row + s.row;
-                int targetCol = this.position.col + s.col;
-                
-//                System.out.println(targetRow + " " + targetCol);
-                if (isInsideBoard(targetRow, targetCol)) {
-                    Piece target= b.getBoard()[targetRow][targetCol];
-                    if (s.col != 0) {
-                        if (target!= null && target.color != this.color) {
-                            captureMoves(possibleMoves, targetRow, targetCol, b);
-                        }
-                    } else {
-                        normalMoves(possibleMoves, targetRow, targetCol, s.row, b);
-                    }
+        if (isInsideBoard(targetRow, targetCol)) {
+            Piece target= b.getBoard()[targetRow][targetCol];
+            if (colDiff != 0) {
+                if (target!= null && target.color != this.color) {
+                    captureMoves(possibleMoves, targetRow, targetCol, b);
                 }
+            } else {
+                normalMoves(possibleMoves, targetRow, targetCol, rowDiff, b);
             }
         }
-        
-        return possibleMoves;
+        return true;
     }
-    
-    private void normalMoves(List<Move> possibleMoves, int targetRow, int targetCol, int rowChange, Board b) {
+    private void normalMoves(List<Move> possibleMoves, int targetRow, int targetCol, int rowDiff, Board b) {
         int startingRank = (this.color == Color.WHITE ? 6 : 1);
         
         Piece target= b.getBoard()[targetRow][targetCol];
         
         if (target== null) {
-            if (Math.abs(rowChange) == 2) {
+            if (Math.abs(rowDiff) == 2) {
                 if (this.position.row != startingRank) {
                     return;
                 }

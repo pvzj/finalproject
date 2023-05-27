@@ -37,21 +37,13 @@ public abstract class Piece {
         
         PieceOutcome coordinateOutcomes = getCoordinateOutcomes();
         
-        for (List<Square> direction : coordinateOutcomes.outcomes) {
-            for (Square s : direction) {
-                int targetRow = this.position.row + s.row;
-                int targetCol = this.position.col + s.col;
+        for (List<Outcome> direction : coordinateOutcomes.outcomes) {
+            for (Outcome o : direction) {
+                int targetRow = this.position.row + o.rowDiff;
+                int targetCol = this.position.col + o.colDiff;
 
-                if (isInsideBoard(targetRow, targetCol)) {
-                    Piece p = b.getBoard()[targetRow][targetCol];
-                    if (p == null) {
-                        possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
-                    } else {
-                        if (p.color != this.color) {
-                            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
-                        }
-                        break;
-                    }    
+                if (!checkMove(b, possibleMoves, targetRow, targetCol)) {
+                    break;
                 }
             }
         }
@@ -59,16 +51,29 @@ public abstract class Piece {
         return possibleMoves;
     }
     
-    public PieceOutcome iterateThroughOutcomes(int[][][] outcome) {
-        PieceOutcome p = new PieceOutcome();
-        for (int[][] direction : outcome) {
-            List<Square> l = new ArrayList<>();
-            for (int[] coordinate : direction) {
-                l.add(new Square(coordinate[0], coordinate[1]));
+    public boolean checkMove(Board b, List<Move> possibleMoves, int targetRow, int targetCol) {
+         if (isInsideBoard(targetRow, targetCol)) {
+            Piece target = b.getBoard()[targetRow][targetCol];
+            if (target == null || target.color != this.color) {
+                possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
+                return true;
             }
-            p.outcomes.add(l);
+         }
+         
+         return false;
+    }
+    
+    public PieceOutcome iterateThroughOutcomes(int[][][] outcome) {
+        PieceOutcome res = new PieceOutcome();
+        
+        for (int[][] direction : outcome) {
+            List<Outcome> outcomes = new ArrayList<>();
+            for (int[] coordinate : direction) {
+                outcomes.add(new Outcome(coordinate[0], coordinate[1]));
+            }
+            res.outcomes.add(outcomes);
         }
-        return p;
+        return res;
     }
     
     public abstract char getCharacter();
