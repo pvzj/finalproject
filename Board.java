@@ -176,11 +176,12 @@ public class Board {
             Castling.performCastlingMove(this, Chess.currentTurn,m.isCastleKingside());
         }
             
-        Piece p = this.getPiece(m.getStartRow(), m.getStartCol());
-        this.setPiece(m.getStartRow(), m.getStartCol(), null);
-        this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
+        Piece startingPiece = m.getPiece();
+        Square originalPosition = startingPiece.getPosition();
+        this.setPiece(originalPosition.row, originalPosition.col, null);
+        this.setPiece(m.getTargetRow(), m.getTargetCol(), startingPiece);
 
-        Piece clonedPiece = p.clone();
+        Piece clonedPiece = startingPiece.clone();
         clonedPiece.position = new Square(m.getTargetRow(), m.getTargetCol());
         
         this.setPiece(m.getTargetRow(), m.getTargetCol(), clonedPiece);

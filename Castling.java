@@ -16,8 +16,11 @@ public class Castling {
         int row = (color == Color.WHITE) ? 7 : 0;
         int kingStartCol = 4;
         int rookStartCol = kingside ? 7 : 0;
+        
         int kingTargetCol = kingside ? 6 : 2;
         int rookTargetCol = kingside ? 5 : 3;
+        
+//        Piece king = board.getPiece(row, kingStartCol);
 
         return new int[]{ row, kingStartCol, rookStartCol, kingTargetCol, rookTargetCol };
     }
@@ -31,11 +34,12 @@ public class Castling {
         int kingTargetCol = castlingData[3];
         int rookTargetCol = castlingData[4];
         
-        board.makeMove(new Move(row, kingStartCol, row, kingTargetCol, false, false));
-        board.makeMove(new Move(row, rookStartCol, row, rookTargetCol, false, false));
+        Piece king = board.getPiece(row, kingStartCol);
+        Piece rook = board.getPiece(row, rookStartCol);
+        
+        board.makeMove(new Move(king, row, kingTargetCol, false, false));
+        board.makeMove(new Move(rook, row, rookTargetCol, false, false));
     }
-    
-    
     
     public static void checkCastlingLegality(Board board, Color color, Set<Move> moves) {
         if (board.isInCheck(color)) {
@@ -47,21 +51,23 @@ public class Castling {
         
         
         if (kingside) {
-            moves.add(createMove(color, kingside));
+            moves.add(createMove(board, color, kingside));
         }
         if (queenside) {
-            moves.add(createMove(color, kingside));
+            moves.add(createMove(board, color, kingside));
         }
     }
     
-    private static Move createMove(Color color, boolean kingside) {
+    public static Move createMove(Board board, Color color, boolean kingside) {
         int[] castlingData = getCastlingData(color, true);
         
         int row = castlingData[0];
         int kingStartCol = castlingData[1];
         int kingTargetCol = castlingData[3];
         
-        return new Move(row, kingStartCol, row, kingTargetCol, true, kingside);
+        Piece king = board.getPiece(row, kingStartCol);
+        
+        return new Move(king, row, kingTargetCol, true, kingside);
     }
     
     public static boolean isLegal(Board board, Color color, boolean kingside) {
@@ -96,13 +102,16 @@ public class Castling {
         int end = kingside ? 6 : kingStartCol - 1;
         
         for (int col = start; col <= end; col++) {
-            if (board.getPiece(row, col) != null) {
+            Piece targetPiece = board.getPiece(row, col);
+            if (targetPiece != null) {
                 return false;
             }
             
             Board copy = board.clone();
             
-            copy.makeMove(new Move(row, kingStartCol, row, col, false, false));
+            Piece king = board.getPiece(row, kingStartCol);
+            
+            copy.makeMove(new Move(king, row, col, false, false));
             if (copy.isInCheck(color)) {
                 return false;
             }

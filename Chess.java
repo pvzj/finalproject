@@ -4,7 +4,9 @@
  */
 package finalproject;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -12,31 +14,47 @@ import java.util.Set;
  * @author jchen
  */
 public class Chess {
-    public static Board gameboard = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    public static Board gameboard = new Board("1rq1k2r/p1p1n2p/p2p1pP1/2b1B3/2P1P3/2NQ1NPb/P1PP4/R3K2R");
     
     public static Color currentTurn = Color.BLACK;
     
+    public static List<Move> gameLog = new ArrayList<>();
+    
     public static void main(String args[]) {
-        
-        
         gameboard.displayBoard();
         
-//        for (Piece[] line: Board.board) {
-//            for (Piece p : line) {
-//                if (p != null) {
-//                    System.out.println(Move.indexToSquare(p.row, p.col));
-//                    System.out.println(p.possibleMoves());
-//                }
-//            }
-//        }
-//        System.out.println(gameboard.isInCheck(gameboard, Color.WHITE));
-//        System.out.println(gameboard.getLegalMoves(currentTurn));
-        System.out.println(gameboard.getLegalMoves(currentTurn).size());
-//        System.out.println(gameboard.board[7][1].possibleMoves(gameboard));
-//        Castling.performCastlingMove(gameboard, currentTurn, false);
-//        System.out.println("dasfkl;sdjfkls");
-//        gameboard.displayBoard();
+        System.out.println(gameboard.getLegalMoves(currentTurn));
     }
     
+    public static void executeMove(Move m) {
+        
+    }
     
+    public static Move promptUserForMove() {
+        //TODO: use scanner to ask user and translate move notation to a Move object
+        //if not legal, then prompt again
+        Set<Move> legalMoves = gameboard.getLegalMoves(currentTurn);
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Enter your move: ");
+            String move = sc.nextLine();
+            for (Move m : legalMoves) {
+                if (m.toString().equals(move)) {
+                    return m;
+                }
+            }
+            System.out.println("Illegal move, try again");
+        }
+    }
+//
+//    private static Move convertMoveNotationToMove(String move) {
+//        if (move.equals("O-O")) {
+//            return Castling.createMove(currentTurn, true);
+//        } else if (move.equals("O-O-O")) {
+//            return Castling.createMove(currentTurn, false);
+//        }
+//        
+//        return null;
+//    }
 }

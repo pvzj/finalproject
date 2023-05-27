@@ -73,7 +73,7 @@ public class Pawn extends Piece {
                     return;
                 }
             }
-            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
+            possibleMoves.add(new Move(this, targetRow, targetCol, false, false));
         }
     }
     
@@ -81,7 +81,7 @@ public class Pawn extends Piece {
         Piece target= b.getBoard()[targetRow][targetCol];
         
         if (target!= null && target.color != this.color) {
-                possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
+                possibleMoves.add(new Move(this, targetRow, targetCol, false, false));
         }
     }
     

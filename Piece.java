@@ -28,6 +28,10 @@ public abstract class Piece {
         return color;
     }
     
+    public Square getPosition() {
+        return position;
+    }
+    
     public static boolean isInsideBoard(int row, int col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
@@ -55,7 +59,7 @@ public abstract class Piece {
          if (isInsideBoard(targetRow, targetCol)) {
             Piece target = b.getBoard()[targetRow][targetCol];
             if (target == null || target.color != this.color) {
-                possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
+                possibleMoves.add(new Move(this, targetRow, targetCol, false, false));
                 return true;
             }
          }
