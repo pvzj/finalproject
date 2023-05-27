@@ -128,9 +128,13 @@ public class Board {
 //            temp.displayBoard();
             if (!temp.isInCheck(c)) {
                 legalMoves.add(m);
-            }
+            } 
             
-        }    
+        }
+        
+        Castling.checkCastlingLegality(this, c, legalMoves);
+        
+        
         return legalMoves;  
     }
     
@@ -167,18 +171,11 @@ public class Board {
         return null;
     }
     
-//    public void makeMove(Move m) {
-//        Piece p = this.getPiece(m.getStartRow(), m.getStartCol());
-//        this.setPiece(m.getStartRow(), m.getStartCol(), null);
-//        this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
-//        
-//        p.position.row = m.getTargetRow();
-//        p.position.col = m.getTargetCol();
-//        
-//        System.out.println(p.getCharacter());
-//    }
-    
     public void makeMove(Move m) {
+        if (m.isCastleMove()) {
+            Castling.performCastlingMove(this, Chess.currentTurn,m.isCastleKingside());
+        }
+            
         Piece p = this.getPiece(m.getStartRow(), m.getStartCol());
         this.setPiece(m.getStartRow(), m.getStartCol(), null);
         this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
@@ -211,56 +208,5 @@ public class Board {
             }
         }
         return newBoard;
-    }
-    
-    public boolean isCastlingLegal(Color color, boolean kingside) {
-        int row = (color == Color.WHITE) ? 7 : 0;
-        int kingStartCol = 4;
-        int rookStartCol = (kingside) ? 7 : 0;
-        int kingTargetCol = (kingside) ? 6 : 2;
-        int rookTargetCol = (kingside) ? 5 : 3;
-        
-        
-        Piece king = getPiece(row, kingStartCol);
-        Piece rook = getPiece(row, rookStartCol);
-
-        if (!arePiecesValidCastling(color, king, rook, kingside)) {
-            return false;
-        }
-
-        if (!isPathClear(color, row, kingStartCol, rookStartCol, kingTargetCol, rookTargetCol)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean arePiecesValidCastling(Color color, Piece king, Piece rook, boolean kingside) {
-        return king != null && rook != null && !king.hasMoved && !rook.hasMoved;
-    }
-
-    private boolean isPathClear(Color color, int row, int kingStartCol, int rookStartCol, int kingTargetCol, int rookTargetCol) {
-        int start = Math.min(kingStartCol, rookStartCol);
-        int end = Math.max(kingTargetCol, rookTargetCol);
-
-        for (int col = start + 1; col < end; col++) {
-            if (getPiece(row, col) != null) {
-                return false;
-            }
-            
-            Board copy = this.clone();
-            
-            copy.makeMove(new Move(row, kingStartCol, row, col));
-            if (copy.isInCheck(color)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void performCastlingMove(int row, int kingStartCol, int kingTargetCol, int rookStartCol, int rookTargetCol) {
-        this.makeMove(new Move(row, kingStartCol, row, kingTargetCol));
-        this.makeMove(new Move(row, rookStartCol, row, rookTargetCol));
     }
 }

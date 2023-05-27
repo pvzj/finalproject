@@ -45,10 +45,10 @@ public abstract class Piece {
                 if (isInsideBoard(targetRow, targetCol)) {
                     Piece p = b.getBoard()[targetRow][targetCol];
                     if (p == null) {
-                        possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol));
+                        possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
                     } else {
                         if (p.color != this.color) {
-                            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol));
+                            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
                         }
                         break;
                     }    

@@ -48,9 +48,9 @@ public class Pawn extends Piece {
                 
 //                System.out.println(targetRow + " " + targetCol);
                 if (isInsideBoard(targetRow, targetCol)) {
-                    Piece p = b.getBoard()[targetRow][targetCol];
+                    Piece target= b.getBoard()[targetRow][targetCol];
                     if (s.col != 0) {
-                        if (p != null && p.color != this.color) {
+                        if (target!= null && target.color != this.color) {
                             captureMoves(possibleMoves, targetRow, targetCol, b);
                         }
                     } else {
@@ -66,21 +66,31 @@ public class Pawn extends Piece {
     private void normalMoves(List<Move> possibleMoves, int targetRow, int targetCol, int rowChange, Board b) {
         int startingRank = (this.color == Color.WHITE ? 6 : 1);
         
-        Piece p = b.getBoard()[targetRow][targetCol];
+        Piece target= b.getBoard()[targetRow][targetCol];
         
-        if (p == null) {  
-            if (Math.abs(rowChange) == 2 && this.position.row != startingRank) {
-                return;
+        if (target== null) {
+            if (Math.abs(rowChange) == 2) {
+                if (this.position.row != startingRank) {
+                    return;
+                }
+                
+                
+                int infrontRowOffset = (this.color == Color.WHITE ? -1 : 1);
+                
+                Piece infront = b.getBoard()[this.position.row+infrontRowOffset][this.position.col];
+                if (infront != null) {
+                    return;
+                }
             }
-            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol));
+            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
         }
     }
     
     private void captureMoves(List<Move> possibleMoves, int targetRow, int targetCol, Board b) {
-        Piece p = b.getBoard()[targetRow][targetCol];
+        Piece target= b.getBoard()[targetRow][targetCol];
         
-        if (p != null && p.color != this.color) {
-                possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol));
+        if (target!= null && target.color != this.color) {
+                possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
         }
     }
     

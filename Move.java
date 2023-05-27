@@ -11,15 +11,21 @@ package finalproject;
 public class Move {
     private Square start;
     private Square target;
+    private boolean castling;
+    private boolean kingside;
 
-    public Move(Square start, Square target) {
+    public Move(Square start, Square target, boolean castling, boolean kingside) {
         this.start = start;
         this.target = target;
+        this.castling = castling;
+        this.kingside = kingside;
     }
 
-    public Move(int startRow, int startCol, int targetRow, int targetCol) {
+    public Move(int startRow, int startCol, int targetRow, int targetCol, boolean castling, boolean kingside) {
         this.start = new Square(startRow, startCol);
         this.target = new Square(targetRow, targetCol);
+        this.castling = castling;
+        this.kingside = kingside;
     }
 
     public int getStartRow() {
@@ -45,9 +51,19 @@ public class Move {
     public Square getTarget() {
         return target;
     }
-    
+
+    public boolean isCastleMove() {
+        return castling;
+    }
+
+    public boolean isCastleKingside() {
+        return kingside;
+    }
     
     public String toString() {
+        if (castling) {
+            return kingside ? "O-O" : "O-O-O";
+        }
         return indexToSquare(start.row, start.col) + "->" + indexToSquare(target.row, target.col);
     }
     
