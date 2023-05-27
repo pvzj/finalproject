@@ -37,23 +37,6 @@ public class Pawn extends Piece {
         return (this.color == Color.WHITE ? whiteOutcomeArray : blackOutcomeArray);
     }
     
-//    @Override
-//    public List<Move> possibleMoves(Board b) {
-//        List<Move> possibleMoves = new ArrayList<>();
-//        
-//        for (List<Outcome> direction : coordinateOutcomes.outcomes) {
-//            for (Outcome o : direction) {
-//                int targetRow = this.position.row + o.rowDiff;
-//                int targetCol = this.position.col + o.colDiff;
-//
-//                
-//                
-//            }
-//        }
-//        
-//        return possibleMoves;
-//    }
-    
     @Override
     public boolean checkMove(Board b, List<Move> possibleMoves, int targetRow, int targetCol) {
         int rowDiff = this.position.row-targetRow;
