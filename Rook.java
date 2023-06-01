@@ -41,5 +41,10 @@ public class Rook extends Piece {
     public Piece clone() {
         return new Rook(this.color, this.position);
     }
+    
+    @Override
+    public String getPieceName() {
+        return "rook";
+    }
 }
 

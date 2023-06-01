@@ -46,4 +46,9 @@ public class Knight extends Piece {
     public Piece clone() {
         return new Knight(this.color, this.position);
     }
+    
+    @Override
+    public String getPieceName() {
+        return "knight";
+    }
 }

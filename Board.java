@@ -1,6 +1,7 @@
 package finalproject;
 
 import java.util.*;
+import javax.swing.Icon;
 
 public class Board {
     public Piece[][] board;
@@ -79,7 +80,7 @@ public class Board {
                 return null;
         }
     }
-
+    
     public void displayBoard() {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
@@ -173,7 +174,7 @@ public class Board {
     
     public void makeMove(Move m) {
         if (m.isCastleMove()) {
-            Castling.performCastlingMove(this, Chess.currentTurn,m.isCastleKingside());
+            Castling.performCastlingMove(this, GUI.currentTurn,m.isCastleKingside());
         }
             
         Piece p = this.getPiece(m.getStartRow(), m.getStartCol());

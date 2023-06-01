@@ -45,5 +45,10 @@ public class Queen extends Piece {
         return new Queen(this.color, position);
     }
     
+    @Override
+    public String getPieceName() {
+        return "queen";
+    }
+    
 }
 

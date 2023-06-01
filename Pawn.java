@@ -89,4 +89,9 @@ public class Pawn extends Piece {
     public Piece clone() {
         return new Pawn(this.color, position);
     }
+    
+    @Override
+    public String getPieceName() {
+        return "pawn";
+    }
  }

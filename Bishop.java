@@ -44,4 +44,9 @@ public class Bishop extends Piece {
     public Piece clone() {
         return new Bishop(this.color, this.position);
     }
+    
+    @Override
+    public String getPieceName() {
+        return "bishop";
+    }
 }

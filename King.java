@@ -45,4 +45,9 @@ public class King extends Piece {
     public Piece clone() {
         return new King(this.color, this.position);
     }    
+    
+    @Override
+    public String getPieceName() {
+        return "king";
+    }
 }
