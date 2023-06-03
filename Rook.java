@@ -8,7 +8,7 @@ package finalproject;
  *
  * @author jchen
  */
-public class Rook extends Piece {
+public class Rook extends Piece { //rook class, extends piece: same thing as other piece classes (comments in bishop class)
     public Rook(Color color, Square position) {
         super(color, position);
         int[][][] rookOutcomes = {

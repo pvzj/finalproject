@@ -8,10 +8,10 @@ package finalproject;
  *
  * @author jchen
  */
-public enum Color {
+public enum Color { //enum with black and white
     WHITE, BLACK;
     
-    public static Color otherColor(Color c) {
+    public static Color otherColor(Color c) { //get the other color
         return c == WHITE ? Color.BLACK : Color.WHITE;
     }
 }

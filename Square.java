@@ -8,15 +8,21 @@ package finalproject;
  *
  * @author jchen
  */
-public class Square {
-    public int row;
+public class Square { //represents a square on the board  
+    public int row; //attributes
     public int col;
     
+    //constructors
     Square(int row, int col) {
         this.row = row;
         this.col = col;
     }
-
+    
+    Square(Square s) {
+        this(s.row, s.col);
+    }
+    
+    //getters/setters
     public int getRow() {
         return row;
     }
@@ -32,6 +38,8 @@ public class Square {
     public void setCol(int col) {
         this.col = col;
     }
+    
+    //equals method, compares the rows and columns of the square
     @Override
     public boolean equals(Object o) {
         if (o == null) {
@@ -47,15 +55,16 @@ public class Square {
         return this.row == s.row && this.col == s.col;
     }
     
-    public String toString() {
-        return "(" + row + " " + col+")";
-    }
-    
     @Override
-    public int hashCode() {
+    public int hashCode() { //ensures .contains works
         int result = 17;
         result = 31 * result + row;
         result = 31 * result + col;
         return result;
+    }
+    
+    //tostring for testing
+    public String toString() {
+        return "(" + row + " " + col+")";
     }
 }

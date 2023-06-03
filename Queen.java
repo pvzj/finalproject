@@ -10,10 +10,11 @@ import java.util.HashSet;
  *
  * @author jchen
  */
-public class Queen extends Piece {
+public class Queen extends Piece { //similar to other pieces, but slightly different
+    //queen movement is the same as the rook and bishop movements put together
     public Queen(Color color, Square position) {
         super(color, position);
-        coordinateOutcomes = createQueenOutcomes();
+        coordinateOutcomes = createQueenOutcomes(); //use createQueenOutcomes method instead of its own array
     }
     
     public Queen(Color color, int row, int col) {
@@ -30,10 +31,12 @@ public class Queen extends Piece {
     }
     
     public PieceOutcome createQueenOutcomes() {
-        PieceOutcome bishopCoordinateOutcomes = new Bishop(null, null).coordinateOutcomes;
+        //get pieceoutcomes of the bishop and rooks
+        PieceOutcome bishopCoordinateOutcomes = new Bishop(null, null).coordinateOutcomes; 
         PieceOutcome rookCoordinateOutcomes = new Rook(null, null).coordinateOutcomes;
         PieceOutcome queenCoordinateOutcomes = new PieceOutcome();
         
+        //combine the two sets
         queenCoordinateOutcomes.outcomes = new HashSet<>(bishopCoordinateOutcomes.outcomes);
         queenCoordinateOutcomes.outcomes.addAll(rookCoordinateOutcomes.outcomes);
         

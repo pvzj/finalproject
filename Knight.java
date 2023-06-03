@@ -8,13 +8,9 @@ package finalproject;
  *
  * @author jchen
  */
-public class Knight extends Piece {
-    public Knight(Color color, Square position) {
-        super(color, position);
-        
-        
-        
-        int[][][] coordinateOutcomesArray = {
+public class Knight extends Piece { //knight class, same thing as other piece classes (comments in bishop class)
+    //each square represents its own direction because knights can't be blocked
+    public static final int[][][] coordinateOutcomesArray = {
             {{-2, -1}}, 
             {{-2, 1}},
             {{-1, -2}}, 
@@ -23,7 +19,10 @@ public class Knight extends Piece {
             {{1, 2}},
             {{2, -1}}, 
             {{2, 1}}
-        };
+    };
+    
+    public Knight(Color color, Square position) {
+        super(color, position);
         
         coordinateOutcomes = iterateThroughOutcomes(coordinateOutcomesArray);
     }

@@ -8,15 +8,16 @@ package finalproject;
  *
  * @author jchen
  */
-public class Outcome {
-    public int rowDiff;
+public class Outcome { //represents difference in index for a piece move
+    public int rowDiff; //difference in row and col values
     public int colDiff;
     
+    //constructor
     Outcome(int rowDiff, int colDiff) {
         this.rowDiff = rowDiff;
         this.colDiff = colDiff;
     }
-
+    //getters/setters
     public int getRowDiff() {
         return rowDiff;
     }
@@ -32,6 +33,4 @@ public class Outcome {
     public void setColDiff(int colDiff) {
         this.colDiff = colDiff;
     }
-    
-    
 }

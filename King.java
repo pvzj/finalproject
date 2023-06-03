@@ -4,17 +4,13 @@
  */
 package finalproject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author jchen
  */
-public class King extends Piece {
-    public King(Color color, Square position) {
-        super(color, position);
-        int[][][] coordinateOutcomesArray = {
+public class King extends Piece { //king class, extends piece: same thing as other piece classes (comments in bishop class)
+    //each 2d array is only 1 element long, because the king can move one square in any direction 
+    public static final int[][][] coordinateOutcomesArray = {
             {{-1, -1}},
             {{-1, 1}},
             {{-1, 0}},
@@ -23,7 +19,10 @@ public class King extends Piece {
             {{1, -1}},
             {{1, 0}},
             {{1, 1}}
-        };
+    };
+    
+    public King(Color color, Square position) {
+        super(color, position);
         
         coordinateOutcomes = iterateThroughOutcomes(coordinateOutcomesArray);
     }

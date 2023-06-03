@@ -13,44 +13,44 @@ import javax.swing.SwingUtilities;
  *
  * @author jchen
  */
-public class Game {
-    public static Board gameboard = new Board();
-    public static Color currentTurn = Color.WHITE;
+public class Game { //facilitates the flow of the game
+    public static Board gameboard = new Board(); //board object
+    public static Color currentTurn = Color.WHITE; //curent turn
     
-    public static List<Move> moveLog = new ArrayList<>();
+    public static List<Move> moveLog = new ArrayList<>(); //records the whole game
     
     public static void makeMove(Square start, Square target) {
         Move m;
-        
-        boolean isMoveCastling = Castling.isCastleMove(gameboard, currentTurn, start, target);
-        if (isMoveCastling) {
-            m = Castling.createMove(currentTurn, target.col - start.col > 0);
+        //if move is castling
+        if (Castling.isCastleMove(gameboard, currentTurn, start, target)) {
+            m = Castling.createMove(currentTurn, target.col - start.col > 0); //create the move from the castling class
         } else {
-            m = new Move(start, target, false, false);
+            m = new Move(start, target, false, false); //otherwise create the move normally
         }
         
-        Set<Move> legalMoves = gameboard.getLegalMoves(currentTurn);
+        Set<Move> legalMoves = gameboard.getLegalMoves(currentTurn); //get all legal moves
         
-        if (legalMoves.contains(m)) {
-            gameboard.makeMove(m);
-            currentTurn = Color.otherColor(currentTurn);
+        if (legalMoves.contains(m)) { //if the move inputted by the user is in the legal move list
+            gameboard.makeMove(m); //make teh move
+            currentTurn = Color.otherColor(currentTurn); //switch the color
             
-            moveLog.add(m);
+            moveLog.add(m); //add the move to the game log
+            System.out.println(moveLog);
         }
         
-        if (isGameEnd()) {
+        if (isGameEnd()) { //if teh game has ended close the window
             GUI.closeWindow();
         }
     }
     
     public static boolean isGameEnd() {
-        Set<Move> legalMoves = gameboard.getLegalMoves(currentTurn);
+        Set<Move> legalMoves = gameboard.getLegalMoves(currentTurn); //get all legal moves
         
-        if (legalMoves.isEmpty()) {
-            if (gameboard.isInCheck(currentTurn)) {
-                System.out.println("Checkmate!");
+        if (legalMoves.isEmpty()) { //if there are no legal moves
+            if (gameboard.isInCheck(currentTurn)) { //check if the user is also in check
+                System.out.println("Checkmate!"); //if so, checkmate
             } else {
-                System.out.println("Stalemate!");
+                System.out.println("Stalemate!"); //if not stalemate
             }
             
             return true;
@@ -60,6 +60,6 @@ public class Game {
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> GUI.createAndShowGUI());
+        SwingUtilities.invokeLater(() -> GUI.init()); //create GUI
     }
 }

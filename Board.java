@@ -1,7 +1,10 @@
 package finalproject;
 
-import java.util.*;
-import javax.swing.Icon;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+
 
 public class Board { //represents the chessboard
     public Piece[][] board; //2d array of pieces 
@@ -94,7 +97,7 @@ public class Board { //represents the chessboard
         }
     }
     
-    public Set<Move> getAllMoves(Color color) { //for every piece on the board, 
+    public Set<Move> getAllMoves(Color color) { //get all the possible moves on the board, disregarding check
         Set<Move> moves = new HashSet<>();
         
         for (Piece[] row : board) { //iterate through every square on the board
@@ -109,33 +112,38 @@ public class Board { //represents the chessboard
         return moves;
     }
     
-    public Set<Move> getLegalMoves(Color c) {
+    public Set<Move> getLegalMoves(Color c) { //get all the legal moves on the board, regarding check
         Set<Move> legalMoves = new HashSet<>();
-        for (Move m : this.getAllMoves(c)) {
-            Board temp = this.clone();
+        
+        for (Move m : this.getAllMoves(c)) { //get all moves
+            Board temp = this.clone(); //clone the board
             
-            temp.makeMove(m);
-            if (!temp.isInCheck(c)) {
-                legalMoves.add(m);
+            temp.makeMove(m); //make the move
+            
+            if (!temp.isInCheck(c)) { //if the player is not in check, after the move has been played
+                legalMoves.add(m); //add it to the legal moves
             } 
             
         }
         
-        legalMoves.addAll(Castling.getCastleMoves(this, c));
+        //add the legal castling moves, since castling is handled separately
+        legalMoves.addAll(Castling.getCastleMoves(this, c)); 
         
         return legalMoves;  
     }
     
-    public boolean isInCheck(Color color) {
-        Square kingCoordinates = getKingCoordinates(color);
-        for (Piece[] r : board) {
-            for (Piece p : r) {
-                if (p == null || p.color == color) {
+    public boolean isInCheck(Color color) { //checks if the given color is in check
+        Square kingCoordinates = getKingCoordinates(color); //get the king's position
+        
+        for (Piece[] row : board) {
+            for (Piece piece : row) { //iterate through the board
+                if (piece == null || piece.color == color) { //only get pieces of the opposite color
                     continue;
                 }
                 
-                List<Move> moves = p.possibleMoves(this);
+                List<Move> moves = piece.possibleMoves(this); //get the piece's possible moves
                 
+                //if any of the piece's moves target the king, return true, since the king is in check
                 for (Move m : moves) {
                     if (m.getTarget().equals(kingCoordinates)) {
                         return true;
@@ -143,62 +151,67 @@ public class Board { //represents the chessboard
                 }
             }
         }
-        
+        //otherwise return false
         return false;
     }
     
     public Square getKingCoordinates(Color c) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                Piece p = this.getPiece(i, j);
+        for (int row = 0; row < board.length; row++) { //iterate through the board
+            for (int col = 0; col < board[0].length; col++) {
+                Piece piece = this.getPiece(row, col); //get piece on the square
                 
-                if ((p instanceof King) && p.color == c) {
-                    return new Square(i, j);
+                if (piece == null) {
+                    continue;
+                }
+                
+                //check if the piece is a king and its color matches
+                if ((piece instanceof King) && piece.color == c) {
+                    return new Square(row, col); //return this square
                 }
             }
         }
         return null;
     }
     
-    public void makeMove(Move m) {
-        if (m.isCastleMove()) {
+    public void makeMove(Move m) { //make a move on the board
+        if (m.isCastleMove()) { //castling is handled separately
             Castling.performCastlingMove(this, Game.currentTurn,m.isCastleKingside());
             return;
         }
         
-        Piece p = this.getPiece(m.getStart());
+        Piece p = this.getPiece(m.getStart()); //get the piece at the start
         
-        this.setPiece(m.getStartRow(), m.getStartCol(), null);
-        this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
-
-        Piece clonedPiece = p.clone();
-        clonedPiece.position = new Square(m.getTargetRow(), m.getTargetCol());
+        this.setPiece(m.getStart(), null); //set the starting position to null
         
-        this.setPiece(m.getTargetRow(), m.getTargetCol(), clonedPiece);
+        //create clone of the piece, as to not modify the original position
+        //this is because the code calls this method for every possible move to see if the move is legal
+        //therefore, the original piece should not be modified and a copy should be used
+        Piece clonedPiece = p.clone(); 
+        clonedPiece.position = new Square(m.getTarget()); //set the position of the piece
         
+        this.setPiece(m.getTarget(), clonedPiece); //set the target
+        
+        //update the moved status
         clonedPiece.hasMoved = true;
-        
-//        System.out.println(clonedPiece.getCharacter());
     }
-    
-    
     
     //clone the board
     //this is used to test the legality of a move
     @Override
     public Board clone() {
         Board newBoard = new Board();
-        for (int i = 0; i < this.board.length; i++) {
-            for (int j = 0; j < this.board[0].length; j++) {
-                Piece p = this.getPiece(i, j);
+        for (int row = 0; row < this.board.length; row++) { //iterate through the board
+            for (int col = 0; col < this.board[0].length; col++) {
+                Piece p = this.getPiece(row, col); //get the piece on the old board
 
                 if (p == null) {
-                    newBoard.setPiece(i, j, null);
+                    newBoard.setPiece(row, col, null); //set the piece to null
                 } else {
-                    Piece clonedPiece = p.clone();
-                    newBoard.setPiece(i, j, clonedPiece);
-                    clonedPiece.position.row = i;
-                    clonedPiece.position.col = j;
+                    Piece clonedPiece = p.clone(); //clone the piece
+                    newBoard.setPiece(row, col, clonedPiece); //put the piece on the board
+                    
+                    clonedPiece.position.row = row; //update the piece's position
+                    clonedPiece.position.col = col;
                 }
             }
         }

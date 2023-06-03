@@ -12,18 +12,18 @@ import java.util.Set;
  *
  * @author jchen
  */
-public class PieceOutcome {
-    Set<List<Outcome>> outcomes;
-    
-    PieceOutcome() {
-        outcomes = new HashSet<>();
-    }
+public class PieceOutcome { //represents all the outcomes for a piece
+    //set of list of outcomes
+    //set contains all directions
+    //list contains each outcome
+    //outcomes contaisn the index differences
+    Set<List<Outcome>> outcomes = new HashSet<>();
 
-    public void addDirection(List<Outcome> direction) {
+    public void addDirection(List<Outcome> direction) { //add a new direction
         outcomes.add(direction);
     }
 
-    public Set<List<Outcome>> getOutcomes() {
+    public Set<List<Outcome>> getOutcomes() { //get outcomes
         return outcomes;
     }
 }
