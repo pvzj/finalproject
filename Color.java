@@ -9,6 +9,13 @@ package finalproject;
  * @author jchen
  */
 public enum Color {
-    WHITE,
-    BLACK
+    WHITE, BLACK;
+    
+    public static Color otherColor(Color c) {
+        if (c == WHITE) {
+            return BLACK;
+        } else {
+            return WHITE;
+        }
+    }
 }

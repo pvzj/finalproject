@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -23,11 +25,12 @@ public class GUI {
     public static Board gameboard = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
     public static Color currentTurn = Color.WHITE;
     
-    
+    public static Square moveProcessFirstSquare;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
         gameboard.displayBoard();
-        System.out.println(gameboard.getLegalMoves(Color.BLACK));
+        System.out.println(gameboard.getLegalMoves(Color.WHITE));
     }
 
     private static void createAndShowGUI() {
@@ -36,10 +39,10 @@ public class GUI {
 
         ChessboardPanel chessboardPanel = new ChessboardPanel();
         frame.add(chessboardPanel);
-        
+
         frame.setResizable(false);
         frame.setPreferredSize(new Dimension(560, 585));
-        
+
         frame.pack();
         frame.setVisible(true);
     }
@@ -50,35 +53,72 @@ public class GUI {
         private static final java.awt.Color LIGHT_SQUARE_COLOR = new java.awt.Color(238, 238, 210);
         private static final java.awt.Color DARK_SQUARE_COLOR = new java.awt.Color(118, 150, 86);
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
+        public ChessboardPanel() {
+            setLayout(new GridLayout(BOARD_SIZE, BOARD_SIZE));
+            setPreferredSize(new Dimension(SQUARE_SIZE * BOARD_SIZE, SQUARE_SIZE * BOARD_SIZE));
+            drawPieces();
+        }
 
-            // Draw the chessboard squares
-            for (int row = 0; row < BOARD_SIZE; row++) {
-                for (int col = 0; col < BOARD_SIZE; col++) {
-                    int x = col * SQUARE_SIZE;
-                    int y = row * SQUARE_SIZE;
-
-                    java.awt.Color squareColor = ((row + col) % 2 == 0) ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR;
-                    g.setColor(squareColor);
-                    g.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
-                }
-            }
+        private void drawPieces() {
+            removeAll();
             
             for (int row = 0; row < BOARD_SIZE; row++) {
                 for (int col = 0; col < BOARD_SIZE; col++) {
                     Piece p = gameboard.getPiece(row, col);
                     
-                    if (p == null) {
-                        continue;
+                    JButton squareButton;
+                    
+                    if (p != null) {
+                        Image pieceImage = getIcon(p);
+                        squareButton = new JButton(new ImageIcon(pieceImage));
+                    } else {
+                        squareButton = new JButton();
                     }
-                    Image pieceImage = getIcon(p);
+                    
+                    squareButton.setBackground((row + col) % 2 == 0 ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR);
+                    squareButton.setOpaque(true);
+                    squareButton.setBorderPainted(false);
+                    squareButton.setFocusPainted(false);
+                    squareButton.addActionListener(new SquareButtonActionListener(row, col));
+                    
+                    add(squareButton);
+                }
+            }
+            
+            revalidate();
+            repaint();
+        }
 
-                    int x = col * SQUARE_SIZE;
-                    int y = row * SQUARE_SIZE;
+        private class SquareButtonActionListener implements ActionListener {
+            private final int row;
+            private final int col;
 
-                    g.drawImage(pieceImage, x, y, null);
+            public SquareButtonActionListener(int row, int col) {
+                this.row = row;
+                this.col = col;
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Clicked Square: " + row + ", " + col);
+                
+                Square s = new Square(row, col);
+                
+                if (moveProcessFirstSquare == null) {
+                    moveProcessFirstSquare = s;
+                } else {
+                    Move m = new Move(moveProcessFirstSquare, s, false, false);
+                    System.out.println(m);
+                    
+                    moveProcessFirstSquare = null;
+                    
+                    if (gameboard.getLegalMoves(currentTurn).contains(m)) {
+                        gameboard.makeMove(m);
+                        gameboard.displayBoard();
+                        drawPieces();
+                        
+                        currentTurn = Color.otherColor(currentTurn);
+                    }
                 }
             }
         }

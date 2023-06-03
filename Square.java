@@ -34,6 +34,10 @@ public class Square {
     }
     @Override
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        
         if (!(o instanceof Square)) {
             return false;
         }
@@ -45,5 +49,13 @@ public class Square {
     
     public String toString() {
         return "(" + row + " " + col+")";
+    }
+    
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + row;
+        result = 31 * result + col;
+        return result;
     }
 }

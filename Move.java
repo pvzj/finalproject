@@ -70,5 +70,24 @@ public class Move {
     public static String indexToSquare(int row, int col) {
         return "" + ((char)(col + 'a')) + (8-row);
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof Move)) {
+            return false;
+        }
+        
+        Move m = (Move) o;
+        
+        return this.start.equals(m.start) && this.target.equals(m.target);
+    }
+    
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + start.hashCode();
+        result = 31 * result + target.hashCode();
+        return result;
+    }
 }
 
