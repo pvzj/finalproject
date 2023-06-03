@@ -60,6 +60,12 @@ public class Move {
         return kingside;
     }
     
+    public boolean isPromotion(Piece p) {
+        int promotionRank = Game.currentTurn == Color.WHITE ? 0 : 7;
+        
+        return this.getTargetRow() == promotionRank && p instanceof Pawn;
+    }
+    
     public String toString() {
         if (castling) {
             return kingside ? "O-O" : "O-O-O";
