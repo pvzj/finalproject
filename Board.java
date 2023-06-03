@@ -168,11 +168,6 @@ public class Board { //represents the chessboard
         
         Piece p = this.getPiece(m.getStart());
         
-        if (m.isPromotion(p)) {
-            p = new Queen(Game.currentTurn, m.getStart());
-        }
-        
-        
         this.setPiece(m.getStartRow(), m.getStartCol(), null);
         this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
 
@@ -185,7 +180,6 @@ public class Board { //represents the chessboard
         
 //        System.out.println(clonedPiece.getCharacter());
     }
-    
     
     
     
