@@ -34,7 +34,7 @@ public class GUI {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Chessboard Example");
+        JFrame frame = new JFrame("Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         ChessboardPanel chessboardPanel = new ChessboardPanel();
@@ -100,7 +100,7 @@ public class GUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Clicked Square: " + row + ", " + col);
+//                System.out.println("Clicked Square: " + row + ", " + col);
                 
                 Square s = new Square(row, col);
                 
@@ -108,13 +108,15 @@ public class GUI {
                     moveProcessFirstSquare = s;
                 } else {
                     Move m = new Move(moveProcessFirstSquare, s, false, false);
-                    System.out.println(m);
+//                    System.out.println(m);
                     
                     moveProcessFirstSquare = null;
                     
+                    
+                    System.out.println(gameboard.getLegalMoves(currentTurn));
                     if (gameboard.getLegalMoves(currentTurn).contains(m)) {
                         gameboard.makeMove(m);
-                        gameboard.displayBoard();
+                        
                         drawPieces();
                         
                         currentTurn = Color.otherColor(currentTurn);

@@ -125,8 +125,6 @@ public class Board {
             Board temp = this.clone();
             
             temp.makeMove(m);
-            
-//            temp.displayBoard();
             if (!temp.isInCheck(c)) {
                 legalMoves.add(m);
             } 
@@ -146,8 +144,9 @@ public class Board {
                 if (p == null || p.color == color) {
                     continue;
                 }
-//                System.out.println();
+                
                 List<Move> moves = p.possibleMoves(this);
+                
                 for (Move m : moves) {
                     if (m.getTarget().equals(kingCoordinates)) {
                         return true;

@@ -56,9 +56,11 @@ public abstract class Piece {
     public boolean checkMove(Board b, List<Move> possibleMoves, int targetRow, int targetCol) {
          if (isInsideBoard(targetRow, targetCol)) {
             Piece target = b.getBoard()[targetRow][targetCol];
-            if (target == null || target.color != this.color) {
+            
+            boolean isTargetEmpty = target == null;
+            if (isTargetEmpty || target.color != this.color) {
                 possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false));
-                return true;
+                return isTargetEmpty;
             }
          }
          
