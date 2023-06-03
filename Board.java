@@ -187,6 +187,12 @@ public class Board {
         }
         
         Piece p = this.getPiece(m.getStart());
+        
+        if (isPromotion(m)) {
+            p = new Queen(Game.currentTurn, m.getStart());
+        }
+        
+        
         this.setPiece(m.getStartRow(), m.getStartCol(), null);
         this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
 
@@ -198,6 +204,12 @@ public class Board {
         clonedPiece.hasMoved = true;
         
 //        System.out.println(clonedPiece.getCharacter());
+    }
+    
+    public boolean isPromotion(Move m) {
+        int promotionRank = Game.currentTurn == Color.WHITE ? 0 : 7;
+        
+        return m.getTargetRow() == promotionRank;
     }
     
     @Override

@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
  * @author jchen
  */
 public class Game {
-    public static Board gameboard = new Board("rnbqkbnr/pppppppp/8/8/8/5BN1/PPPPPPPP/RNBQK2R");
+    public static Board gameboard = new Board();
     public static Color currentTurn = Color.WHITE;
     
     public static List<Move> moveLog = new ArrayList<>();
