@@ -46,15 +46,16 @@ public class Pawn extends Piece { //similar to other pieces, but slightly differ
             Piece target= b.getBoard()[targetRow][targetCol]; //target piece
             
             if (colDiff != 0) { //if coldiff is zero, that means the move is a normal move
-                if (target!= null && target.color != this.color) { //check if the target both contains a piece and it is of the opposite color
-                    captureMoves(possibleMoves, targetRow, targetCol, b); //generate the capture moves
-                }
+//                if (target!= null && target.color != this.color) { //check if the target both contains a piece and it is of the opposite color
+                captureMoves(possibleMoves, targetRow, targetCol, b); //generate the capture moves
+                
             } else { //if coldiff is one, that means the move is a capture
                 normalMoves(possibleMoves, targetRow, targetCol, rowDiff, b); //generate the normal moves
             }
         }
         return true; //return true no matter what, because a pawn can't really be blocked
     }
+    
     private void normalMoves(List<Move> possibleMoves, int targetRow, int targetCol, int rowDiff, Board b) { //normal move case
         int startingRank = (this.color == Color.WHITE ? 6 : 1); //starting rank of the pawn
         
@@ -76,16 +77,50 @@ public class Pawn extends Piece { //similar to other pieces, but slightly differ
             }
             
             //add the move
-            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false)); 
+            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false, false)); 
         }
     }
     
     private void captureMoves(List<Move> possibleMoves, int targetRow, int targetCol, Board b) { //check capture moves
-        Piece target= b.getBoard()[targetRow][targetCol]; //get target piece
-        
+        Piece target= b.getPiece(targetRow, targetCol); //get target piece
+
         if (target!= null && target.color != this.color) { //if the target piece is not empty and the color is the opposite of this
-            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false)); //add the piece
+            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false, false)); //add the piece
+        } else if (checkEnPassant(targetRow, targetCol, b)) {
+            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false, true)); //add the piece
         }
+    }
+    
+    public boolean checkEnPassant(int targetRow, int targetCol, Board b) {
+        int enPassantRow = this.color == Color.WHITE ? 2 : 5;
+        
+        if (targetRow != enPassantRow) {
+            return false;
+        }
+        int oppositeStartingRow = this.color == Color.WHITE ? 1 : 6;
+        int oppositeEndingRow = this.color == Color.WHITE ? 3 : 4;
+        
+        Move prev = b.getPreviousMove();
+        
+        if (prev == null) {
+            return false;
+        }
+        
+        Piece movedPiece = b.getPiece(oppositeEndingRow, targetCol);
+        
+        return movedPiece instanceof Pawn && prev.equals(new Move(oppositeStartingRow, targetCol, oppositeEndingRow, targetCol, false, false, false));
+    }
+    
+    public static boolean isEnPassantMove(Board board, Square start, Square target) {
+        Piece piece = board.getPiece(start);
+        Pawn pawn;
+        if (! (piece instanceof Pawn)) {
+            return false;
+        } else {
+            pawn = (Pawn) piece;
+        }
+        
+        return pawn.checkEnPassant(target.row, target.col, board);
     }
     
     @Override

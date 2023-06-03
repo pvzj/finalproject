@@ -59,7 +59,7 @@ public abstract class Piece { //abstract piece method, superclass of all the dif
         boolean isTargetEmpty = target == null; //if the square is empty
         
         if (isTargetEmpty || target.color != this.color) { //if the square is empty or if the target piece is of the opposite color
-            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false)); //legal move
+            possibleMoves.add(new Move(this.position.row, this.position.col, targetRow, targetCol, false, false, false)); //legal move
             
             //if the target was empty, the piece can continue
             //if the target was a piece of the opposite color, it can't continue;

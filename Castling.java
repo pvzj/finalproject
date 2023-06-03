@@ -32,8 +32,8 @@ public class Castling { //important methods for castling
         int kingTargetCol = castlingData[3];
         int rookTargetCol = castlingData[4];
         
-        board.makeMove(new Move(row, kingStartCol, row, kingTargetCol, false, false)); //move king
-        board.makeMove(new Move(row, rookStartCol, row, rookTargetCol, false, false)); //move rook
+        board.makeMove(new Move(row, kingStartCol, row, kingTargetCol, false, false, false)); //move king
+        board.makeMove(new Move(row, rookStartCol, row, rookTargetCol, false, false, false)); //move rook
     }
     
     public static Set<Move> getCastleMoves(Board board, Color color) { //return a set of all the legal castling moves in the position
@@ -80,7 +80,7 @@ public class Castling { //important methods for castling
         int kingStartCol = castlingData[1];
         int kingTargetCol = castlingData[3];
         
-        return new Move(row, kingStartCol, row, kingTargetCol, true, kingside);
+        return new Move(row, kingStartCol, row, kingTargetCol, true, kingside, false);
     }
     
     public static boolean isLegal(Board board, Color color, boolean kingside) { //checks legality of castling in a given position
@@ -111,7 +111,7 @@ public class Castling { //important methods for castling
             
             //make sure the squares in the middle aren't being attacked by an opposing piece
             Board copy = board.clone();
-            copy.makeMove(new Move(row, kingStartCol, row, col, false, false));
+            copy.makeMove(new Move(row, kingStartCol, row, col, false, false, false));
             if (copy.isInCheck(color)) {
                 return false;
             }

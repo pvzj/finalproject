@@ -1,5 +1,6 @@
 package finalproject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,8 @@ public class Board { //represents the chessboard
     public Piece[][] board; //2d array of pieces 
     
     public static final int BOARD_DIMENSION = 8;
+    
+    public List<Move> moveLog = new ArrayList<>(); //records the whole game
     
     public Board() { //default constructor, no parameters
         this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //intializes board from starting position
@@ -177,6 +180,8 @@ public class Board { //represents the chessboard
         if (m.isCastleMove()) { //castling is handled separately
             Castling.performCastlingMove(this, Game.currentTurn,m.isCastleKingside());
             return;
+        } else if (m.isEnPassant()) {
+            this.setPiece(m.getStartRow(), m.getTargetCol(), null);
         }
         
         Piece p = this.getPiece(m.getStart()); //get the piece at the start
@@ -193,6 +198,7 @@ public class Board { //represents the chessboard
         
         //update the moved status
         clonedPiece.hasMoved = true;
+        moveLog.add(m);
     }
     
     //clone the board
@@ -216,6 +222,14 @@ public class Board { //represents the chessboard
             }
         }
         return newBoard;
+    }
+    
+    public Move getPreviousMove() {
+        if (moveLog.isEmpty()) {
+            return null;
+        }
+        
+        return moveLog.get(moveLog.size() - 1);
     }
     
     //getter/setters

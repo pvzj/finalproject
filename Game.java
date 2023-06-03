@@ -14,10 +14,10 @@ import javax.swing.SwingUtilities;
  * @author jchen
  */
 public class Game { //facilitates the flow of the game
-    public static Board gameboard = new Board(); //board object
+    public static Board gameboard = new Board("rnbqkbnr/ppppp1pp/8/8/5p2/6P1/PPPPPP1P/RNBQKBNR"); //board object
     public static Color currentTurn = Color.WHITE; //curent turn
     
-    public static List<Move> moveLog = new ArrayList<>(); //records the whole game
+    
     
     public static void makeMove(Square start, Square target) {
         Move m;
@@ -25,7 +25,7 @@ public class Game { //facilitates the flow of the game
         if (Castling.isCastleMove(gameboard, currentTurn, start, target)) {
             m = Castling.createMove(currentTurn, target.col - start.col > 0); //create the move from the castling class
         } else {
-            m = new Move(start, target, false, false); //otherwise create the move normally
+            m = new Move(start, target, false, false, Pawn.isEnPassantMove(gameboard, start, target));
         }
         
         Set<Move> legalMoves = gameboard.getLegalMoves(currentTurn); //get all legal moves
@@ -34,8 +34,8 @@ public class Game { //facilitates the flow of the game
             gameboard.makeMove(m); //make teh move
             currentTurn = Color.otherColor(currentTurn); //switch the color
             
-            moveLog.add(m); //add the move to the game log
-            System.out.println(moveLog);
+//            moveLog.add(m); //add the move to the game log
+//            System.out.println(moveLog);
         }
         
         if (isGameEnd()) { //if teh game has ended close the window
@@ -58,6 +58,8 @@ public class Game { //facilitates the flow of the game
         
         return false;
     }
+    
+    
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> GUI.init()); //create GUI

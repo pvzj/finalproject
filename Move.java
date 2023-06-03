@@ -13,16 +13,18 @@ public class Move { //represents a move (start and target squares)
     private Square target;
     private boolean castling; //booleans for if the move is a castlign move
     private boolean kingside;
+    private boolean enpassant;
 
-    public Move(Square start, Square target, boolean castling, boolean kingside) { //constructors
+    public Move(Square start, Square target, boolean castling, boolean kingside, boolean enpassant) { //constructors
         this.start = start;
         this.target = target;
         this.castling = castling;
         this.kingside = kingside;
+        this.enpassant = enpassant;
     }
 
-    public Move(int startRow, int startCol, int targetRow, int targetCol, boolean castling, boolean kingside) {
-        this(new Square(startRow, startCol), new Square(targetRow, targetCol), castling, kingside);
+    public Move(int startRow, int startCol, int targetRow, int targetCol, boolean castling, boolean kingside, boolean enpassant) {
+        this(new Square(startRow, startCol), new Square(targetRow, targetCol), castling, kingside, enpassant);
     }
 
     //getters
@@ -56,6 +58,10 @@ public class Move { //represents a move (start and target squares)
 
     public boolean isCastleKingside() {
         return kingside;
+    }
+    
+    public boolean isEnPassant() {
+        return enpassant;
     }
     
     //is move a promotion move
