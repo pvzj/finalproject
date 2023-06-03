@@ -12,10 +12,6 @@ public enum Color {
     WHITE, BLACK;
     
     public static Color otherColor(Color c) {
-        if (c == WHITE) {
-            return BLACK;
-        } else {
-            return WHITE;
-        }
+        return c == WHITE ? Color.BLACK : Color.WHITE;
     }
 }

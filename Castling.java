@@ -4,6 +4,7 @@
  */
 package finalproject;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -35,11 +36,11 @@ public class Castling {
         board.makeMove(new Move(row, rookStartCol, row, rookTargetCol, false, false));
     }
     
-    
-    
-    public static void checkCastlingLegality(Board board, Color color, Set<Move> moves) {
+    public static Set<Move> getCastleMoves(Board board, Color color) {
+        Set<Move> moves = new HashSet<>();
+        
         if (board.isInCheck(color)) {
-            return;
+            return moves;
         }
         
         boolean kingside = isLegal(board, color, true);
@@ -52,9 +53,24 @@ public class Castling {
         if (queenside) {
             moves.add(createMove(color, kingside));
         }
+        
+        return moves;
     }
     
-    private static Move createMove(Color color, boolean kingside) {
+    public static boolean isCastleMove(Board board, Color color, Square start, Square target) {
+        if (start.row != target.row) {
+            return false;
+        }
+        
+        int direction = target.col - start.col;
+        
+        if (Math.abs(direction) != 2) {
+            return false;
+        }
+        return isLegal(board, color, direction > 0);
+    }
+    
+    public static Move createMove(Color color, boolean kingside) {
         int[] castlingData = getCastlingData(color, true);
         
         int row = castlingData[0];

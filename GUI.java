@@ -22,18 +22,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class GUI {
-    public static Board gameboard = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-    public static Color currentTurn = Color.WHITE;
-    
     public static Square moveProcessFirstSquare;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
-        gameboard.displayBoard();
-        System.out.println(gameboard.getLegalMoves(Color.WHITE));
-    }
-
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
         JFrame frame = new JFrame("Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -45,6 +36,10 @@ public class GUI {
 
         frame.pack();
         frame.setVisible(true);
+    }
+    
+    public static void closeWindow() {
+        System.exit(0);
     }
 
     private static class ChessboardPanel extends JPanel {
@@ -64,7 +59,7 @@ public class GUI {
             
             for (int row = 0; row < BOARD_SIZE; row++) {
                 for (int col = 0; col < BOARD_SIZE; col++) {
-                    Piece p = gameboard.getPiece(row, col);
+                    Piece p = Game.gameboard.getPiece(row, col);
                     
                     JButton squareButton;
                     
@@ -100,27 +95,17 @@ public class GUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-//                System.out.println("Clicked Square: " + row + ", " + col);
+                System.out.println("Clicked Square: " + row + ", " + col);
                 
                 Square s = new Square(row, col);
                 
                 if (moveProcessFirstSquare == null) {
                     moveProcessFirstSquare = s;
                 } else {
-                    Move m = new Move(moveProcessFirstSquare, s, false, false);
-//                    System.out.println(m);
-                    
+                    Game.makeMove(moveProcessFirstSquare, s);
                     moveProcessFirstSquare = null;
+                    drawPieces();
                     
-                    
-                    System.out.println(gameboard.getLegalMoves(currentTurn));
-                    if (gameboard.getLegalMoves(currentTurn).contains(m)) {
-                        gameboard.makeMove(m);
-                        
-                        drawPieces();
-                        
-                        currentTurn = Color.otherColor(currentTurn);
-                    }
                 }
             }
         }

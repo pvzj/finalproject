@@ -100,9 +100,19 @@ public class Board {
         return board[row][col];
     }
     
+    public Piece getPiece(Square s) {
+        return board[s.row][s.col];
+    }
+    
     public void setPiece(int row, int col, Piece p) {
         board[row][col] = p;
     }
+    
+    public void setPiece(Square s, Piece p) {
+        board[s.row][s.col] = p;
+    }
+    
+    
     
     public Set<Move> getAllMoves(Color c) {
         Set<Move> moves = new HashSet<>();
@@ -131,8 +141,7 @@ public class Board {
             
         }
         
-        Castling.checkCastlingLegality(this, c, legalMoves);
-        
+        legalMoves.addAll(Castling.getCastleMoves(this, c));
         
         return legalMoves;  
     }
@@ -173,10 +182,11 @@ public class Board {
     
     public void makeMove(Move m) {
         if (m.isCastleMove()) {
-            Castling.performCastlingMove(this, GUI.currentTurn,m.isCastleKingside());
+            Castling.performCastlingMove(this, Game.currentTurn,m.isCastleKingside());
+            return;
         }
-            
-        Piece p = this.getPiece(m.getStartRow(), m.getStartCol());
+        
+        Piece p = this.getPiece(m.getStart());
         this.setPiece(m.getStartRow(), m.getStartCol(), null);
         this.setPiece(m.getTargetRow(), m.getTargetCol(), p);
 
