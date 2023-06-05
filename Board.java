@@ -224,7 +224,7 @@ public class Board { //represents the chessboard
         return newBoard;
     }
     
-    public Move getPreviousMove() {
+    public Move getPreviousMove() { //returns the previous move played in the log
         if (moveLog.isEmpty()) {
             return null;
         }

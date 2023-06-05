@@ -91,36 +91,37 @@ public class Pawn extends Piece { //similar to other pieces, but slightly differ
         }
     }
     
-    public boolean checkEnPassant(int targetRow, int targetCol, Board b) {
-        int enPassantRow = this.color == Color.WHITE ? 2 : 5;
+    public boolean checkEnPassant(int targetRow, int targetCol, Board b) {  //checks if in the en passant square, en passant is possible
+        int enPassantRow = this.color == Color.WHITE ? 2 : 5; //get expected row
         
-        if (targetRow != enPassantRow) {
+        if (targetRow != enPassantRow) { //check if the passed in target matches the expected row
             return false;
         }
         int oppositeStartingRow = this.color == Color.WHITE ? 1 : 6;
-        int oppositeEndingRow = this.color == Color.WHITE ? 3 : 4;
+        int oppositeEndingRow = this.color == Color.WHITE ? 3 : 4; //get data for starting/ending rows
         
-        Move prev = b.getPreviousMove();
+        //see if previous move matches the expected moove
+        Move prev = b.getPreviousMove(); 
         
         if (prev == null) {
             return false;
         }
         
         Piece movedPiece = b.getPiece(oppositeEndingRow, targetCol);
-        
+        //and if the moved piece is also a pawn
         return movedPiece instanceof Pawn && prev.equals(new Move(oppositeStartingRow, targetCol, oppositeEndingRow, targetCol, false, false, false));
     }
     
-    public static boolean isEnPassantMove(Board board, Square start, Square target) {
-        Piece piece = board.getPiece(start);
+    public static boolean isEnPassantMove(Board board, Square start, Square target) { //given two squares, check if en passant is legal
+        Piece piece = board.getPiece(start); //get the start piece
         Pawn pawn;
-        if (! (piece instanceof Pawn)) {
+        if (! (piece instanceof Pawn)) { // check if the piece is a pawn
             return false;
         } else {
             pawn = (Pawn) piece;
         }
         
-        return pawn.checkEnPassant(target.row, target.col, board);
+        return pawn.checkEnPassant(target.row, target.col, board); //verify conditions
     }
     
     @Override
