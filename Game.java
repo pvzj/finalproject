@@ -12,7 +12,7 @@ import javax.swing.SwingUtilities;
  * @author jchen
  */
 public class Game { //facilitates the flow of the game
-    public static Board gameboard = new Board("rnbqkbnr/ppppp1pp/8/8/5p2/6P1/PPPPPP1P/RNBQKBNR"); //board object
+    public static Board gameboard = new Board(); //board object
     public static Color currentTurn = Color.WHITE; //curent turn
     
     
@@ -32,8 +32,7 @@ public class Game { //facilitates the flow of the game
             gameboard.makeMove(m); //make teh move
             currentTurn = Color.otherColor(currentTurn); //switch the color
             
-//            moveLog.add(m); //add the move to the game log
-//            System.out.println(moveLog);
+            gameboard.moveLog.add(m); //add the move to the game log
         }
         
         if (isGameEnd()) { //if teh game has ended close the window

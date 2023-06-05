@@ -194,7 +194,12 @@ public class Board { //represents the chessboard
         Piece clonedPiece = p.clone(); 
         clonedPiece.position = new Square(m.getTarget()); //set the position of the piece
         
-        this.setPiece(m.getTarget(), clonedPiece); //set the target
+        if (!m.isPromotion(p)) {
+            this.setPiece(m.getTarget(), clonedPiece); //set the target
+        } else {
+            this.setPiece(m.getTarget(), new Queen(Game.currentTurn, m.getTarget()));
+        }
+        
         
         //update the moved status
         clonedPiece.hasMoved = true;

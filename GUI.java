@@ -18,6 +18,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class GUI { //GUI for chessboard
+    public static final String filepath = "src/main/java/finalproject/icons/";
     public static Square moveProcessFirstSquare; //first input square from user
 
     public static void init() { //create GUI
@@ -111,7 +112,7 @@ public class GUI { //GUI for chessboard
             String pieceName = p.getPieceName(); //get piece name
             
             try { //find the image
-                return ImageIO.read(new File(("src/main/java/finalproject/icons/" + color + pieceName + ".png"))); 
+                return ImageIO.read(new File((filepath + color + pieceName + ".png"))); 
             } catch (IOException e) { //if images are not found, close window
                 System.out.println("Images Not Found");
                 closeWindow();
